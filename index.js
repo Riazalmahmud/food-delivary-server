@@ -37,6 +37,7 @@ async function run() {
     const userCollection = database.collection("user");
     const feedbackCollection = database.collection("feedbacks");
     const productManage = database.collection("foodManage");
+    const popularProduct = database.collection("popular_pd");
 
     // get api using email
 
@@ -59,6 +60,11 @@ async function run() {
     // get api
     app.get("/products", async (req, res) => {
       const cursor = shopCollection.find({});
+      const result = await cursor.toArray();
+      res.json(result);
+    });
+    app.get("/popular_pd", async (req, res) => {
+      const cursor = popularProduct.find({});
       const result = await cursor.toArray();
       res.json(result);
     });
@@ -130,6 +136,14 @@ async function run() {
     app.post("/products", async (req, res) => {
       const product = req.body;
       const result = await shopCollection.insertOne(product);
+      res.json(result);
+    });
+
+    app.post("/popular_pd", async (req, res) => {
+      const popularbd = req.body;
+      console.log(popularbd, "popular pd request");
+      const result = await popularProduct.insertOne(popularbd);
+      console.log(result, "succesfully publish");
       res.json(result);
     });
 
